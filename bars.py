@@ -6,13 +6,13 @@ def load_data(filepath):
     try:
         with open(filepath, "r", encoding='utf-8') as f:
             return json.loads(f.read())
-    except Exception:
+    except OSError:
         print("invalid path")
 
 
 def get_biggest_bar(json_data):
     def get_seat(x):
-            return x["properties"]["Attributes"]["SeatsCount"]
+        return x["properties"]["Attributes"]["SeatsCount"]
     if json_data is not None:
         biggest_bar = max(json_data["features"], key=get_seat)
         bar_name = biggest_bar["properties"]["Attributes"]["Name"]
