@@ -10,7 +10,7 @@ src->
   features->
     n_элемент_списка->
        geometry->
-         coordinates->[x,y] 
+         coordinates->[долг,шир] 
        properites->
          Attributes->
            "Name"
@@ -73,11 +73,11 @@ def get_closest_bar(data, long, lat):
         return closest
 
 if __name__ == '__main__':
-    data = load_data("1796.json")
+    data = load_data("bars.json")
     #lon28,lat61
     lat = float(input("Введите широту: ").strip())
     long = float(input("Введите долготу: ").strip())
     
     print("\n:Самый большой бар '{x[1]}' - {x[0]} мест".format(x = get_biggest_bar(data)))
     print(":Самый маленький бар '{x[1]}' - {x[0]} мест".format(x = get_smallest_bar(data)))
-    print(":Самый близкий бар {x[1]}".format(x=get_closest_bar(data,lat,long)))
+    print(":Самый близкий бар {x[1]}".format(x=get_closest_bar(data,long,lat)))
