@@ -1,29 +1,32 @@
 """
-формат - src->
-    features->
-        i->
-            geometry->
-                coordinates->[x,y] 
-                type->string
-            properites->
-                Attributes->
-                    "Name"
-                    "SeatsCount"
-            type->
-    type->
+Задача Бары
+===функции===
+- самый большой бар;
+- самый маленький бар;
+- самый близкий бар;
+
+формат json
+src->
+  features->
+    n_элемент_списка->
+       geometry->
+         coordinates->[x,y] 
+       properites->
+         Attributes->
+           "Name"
+           "SeatsCount"
 """
 import json,math
 
 
-
 ###funcs###
-
 def load_data(filepath):
     try:
         with open(filepath,"r", encoding='utf-8') as f:
             return json.loads(f.read())
     except:
         print("invalid path")
+
 
 def get_biggest_bar(data):
     if data is not None:
@@ -35,7 +38,8 @@ def get_biggest_bar(data):
                 biggest[0] = seats_num
                 biggest[1] = name
         return biggest
-    
+
+
 def get_smallest_bar(data):
     if data is not None:
         smallest = []
@@ -50,6 +54,7 @@ def get_smallest_bar(data):
                 smallest[0] = seats_num
                 smallest[1] = name
         return smallest
+
 
 def get_closest_bar(data, long, lat):
     if data!=None and long!=None and lat!=None:
@@ -69,6 +74,10 @@ def get_closest_bar(data, long, lat):
 
 if __name__ == '__main__':
     data = load_data("1796.json")
-    print(get_biggest_bar(data))
-    print(get_smallest_bar(data))
-    print(get_closest_bar(data,37.632015,55.737869))
+    #lon28,lat61
+    lat = float(input("Введите широту: ").strip())
+    long = float(input("Введите долготу: ").strip())
+    
+    print("\n:Самый большой бар '{x[1]}' - {x[0]} мест".format(x = get_biggest_bar(data)))
+    print(":Самый маленький бар '{x[1]}' - {x[0]} мест".format(x = get_smallest_bar(data)))
+    print(":Самый близкий бар {x[1]}".format(x=get_closest_bar(data,lat,long)))
