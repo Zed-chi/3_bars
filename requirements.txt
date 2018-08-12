@@ -1,2 +1,1 @@
-# cat requirements.txt
 requests>=2.10
