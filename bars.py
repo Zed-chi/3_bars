@@ -35,7 +35,7 @@ def load_data():
         with open(path_to_json, "r", encoding="utf-8") as json_file:
             return json.loads(json_file.read())["features"]
     except IndexError:
-        url = ("https://devman.org/media/filer_public/" +
+        url = ("https://devman.org/media/filer_public/"
                "95/74/957441dc-78df-4c99-83b2-e93dfd13c2fa/bars.json")
         res = requests.get(url)
         return json.loads(res.text)["features"]
