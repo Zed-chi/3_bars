@@ -20,10 +20,10 @@ def get_coords():
         return None, None
 
 
-def distance_getter(long, lat):
-        return lambda bar: sqrt(
-            abs(long-bar["geometry"]["coordinates"][0])**2
-            + abs(lat-bar["geometry"]["coordinates"][1])**2)
+def get_distance(long, lat, bar):
+    return sqrt(
+        abs(long-bar["geometry"]["coordinates"][0])**2
+        + abs(lat-bar["geometry"]["coordinates"][1])**2)
 
 
 def load_data(path_to_json):
@@ -32,6 +32,8 @@ def load_data(path_to_json):
             return json.loads(json_file.read())["features"]
     except ValueError:
         return None
+    except OSError as err:
+        exit("{}".format(err))
 
 
 def get_biggest_bar(bars_list):
@@ -46,34 +48,31 @@ def get_smallest_bar(bars_list):
         return smallest_bar
 
 
-def get_closest_bar(bars_list, distance_getter):
+def get_closest_bar(bars_list, long, lat):
     if bars_list is not None:
-        closest = min(bars_list, key=distance_getter)
+        closest = min(bars_list, key=lambda bar: get_distance(long, lat, bar))
         return closest
 
 
 def main():
-    try:
-        if len(sys.argv) < 2:
-            exit("Пустой путь")
-        else:
-            path_to_json = sys.argv[1]
-        bars_list = load_data(path_to_json)
-        if bars_list is None:
-            exit("Invalid JSON")
-        big_bar = get_biggest_bar(bars_list)
-        small_bar = get_smallest_bar(bars_list)
-        long, lat = get_coords()
-        if long is None and lat is None:
-            exit("Invalid coordinates")
-        closest_bar = get_closest_bar(bars_list, distance_getter(long, lat))
-    except OSError as err:
-        print("{}".format(err))
+    if len(sys.argv) < 2:
+        exit("Пустой путь")
     else:
-        print("Самый большой бар - {}".format(get_name(big_bar)))
-        print("Самый маленький бар - {}".format(get_name(small_bar)))
-        print("Самый близкий бар - {}".format(get_name(closest_bar)))
+        path_to_json = sys.argv[1]
+    bars_list = load_data(path_to_json)
+    if bars_list is None:
+        exit("Invalid JSON")
+    big_bar = get_biggest_bar(bars_list)
+    small_bar = get_smallest_bar(bars_list)
+    long, lat = get_coords()
+    if long is None or lat is None:
+        exit("Invalid coordinates")
+    closest_bar = get_closest_bar(bars_list, long, lat)
+    print("Самый большой бар - {}".format(get_name(big_bar)))
+    print("Самый маленький бар - {}".format(get_name(small_bar)))
+    print("Самый близкий бар - {}".format(get_name(closest_bar)))
 
 
 if __name__ == "__main__":
     main()
+
