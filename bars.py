@@ -20,7 +20,7 @@ def get_coords():
         return None, None
 
 
-def get_lambda_for_distance_getter(long, lat):
+def distance_getter(long, lat):
         return lambda bar: sqrt(
             abs(long-bar["geometry"]["coordinates"][0])**2
             + abs(lat-bar["geometry"]["coordinates"][1])**2)
@@ -66,8 +66,7 @@ def main():
         long, lat = get_coords()
         if long is None and lat is None:
             exit("Invalid coordinates")
-        distance_getter = get_lambda_for_distance_getter(long, lat)
-        closest_bar = get_closest_bar(bars_list, distance_getter)
+        closest_bar = get_closest_bar(bars_list, distance_getter(long, lat))
     except OSError as err:
         print("{}".format(err))
     else:
