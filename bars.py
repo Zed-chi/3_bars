@@ -32,8 +32,6 @@ def load_data(path_to_json):
             return json.loads(json_file.read())["features"]
     except ValueError:
         return None
-    except OSError as err:
-        exit("{}".format(err))
 
 
 def get_biggest_bar(bars_list):
@@ -59,7 +57,10 @@ def main():
         exit("Пустой путь")
     else:
         path_to_json = sys.argv[1]
-    bars_list = load_data(path_to_json)
+    try:
+        bars_list = load_data(path_to_json)
+    except OSError as err:
+        exit("{}".format(err))
     if bars_list is None:
         exit("Invalid JSON")
     big_bar = get_biggest_bar(bars_list)
@@ -75,4 +76,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
